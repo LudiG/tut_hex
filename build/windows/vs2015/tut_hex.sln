@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2015
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "tut_hex", "tut_hex.vcxproj", "{7CDE67E8-B1B4-8643-9E73-4B601D7E7436}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Debug|Win32 = Debug|Win32
+		Profile|x64 = Profile|x64
+		Profile|Win32 = Profile|Win32
+		Release|x64 = Release|x64
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7CDE67E8-B1B4-8643-9E73-4B601D7E7436}.Debug|x64.ActiveCfg = Debug|x64
+		{7CDE67E8-B1B4-8643-9E73-4B601D7E7436}.Debug|x64.Build.0 = Debug|x64
+		{7CDE67E8-B1B4-8643-9E73-4B601D7E7436}.Debug|Win32.ActiveCfg = Debug|Win32
+		{7CDE67E8-B1B4-8643-9E73-4B601D7E7436}.Debug|Win32.Build.0 = Debug|Win32
+		{7CDE67E8-B1B4-8643-9E73-4B601D7E7436}.Profile|x64.ActiveCfg = Profile|x64
+		{7CDE67E8-B1B4-8643-9E73-4B601D7E7436}.Profile|x64.Build.0 = Profile|x64
+		{7CDE67E8-B1B4-8643-9E73-4B601D7E7436}.Profile|Win32.ActiveCfg = Profile|Win32
+		{7CDE67E8-B1B4-8643-9E73-4B601D7E7436}.Profile|Win32.Build.0 = Profile|Win32
+		{7CDE67E8-B1B4-8643-9E73-4B601D7E7436}.Release|x64.ActiveCfg = Release|x64
+		{7CDE67E8-B1B4-8643-9E73-4B601D7E7436}.Release|x64.Build.0 = Release|x64
+		{7CDE67E8-B1B4-8643-9E73-4B601D7E7436}.Release|Win32.ActiveCfg = Release|Win32
+		{7CDE67E8-B1B4-8643-9E73-4B601D7E7436}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
