@@ -102,6 +102,26 @@ orxVECTOR pixelToHex_FlatTop(const orxVECTOR& point)
     return result;
 }
 
+orxVECTOR hexToPixel_PointyTop(const orxVECTOR& hex)
+{
+    orxFLOAT size = _tileRadius;
+
+    orxVECTOR result;
+    orxVector_Set(&result, ((orxMath_Pow(3.0, 0.5)  * hex.fX) + (orxMath_Pow(3.0, 0.5)/2.0 * hex.fY)) * size, (3.0/2.0 * hex.fY) * size, 0.0);
+
+    return result;
+}
+
+orxVECTOR hexToPixel_FlatTop(const orxVECTOR& hex)
+{
+    orxFLOAT size = _tileRadius;
+
+    orxVECTOR result;
+    orxVector_Set(&result, (3.0/2.0 * hex.fX) * size, ((orxMath_Pow(3.0, 0.5)/2.0 * hex.fX) + (orxMath_Pow(3.0, 0.5)  * hex.fY)) * size, 0.0);
+
+    return result;
+}
+
 #pragma mark - orx
 
 static orxSTATUS orxFASTCALL handleShaderEvent(const orxEVENT* currentEvent)
@@ -161,7 +181,7 @@ orxSTATUS orxFASTCALL Run()
     // Calculate the tile position from the mouse position.
     orxVECTOR tilePosOld;
     orxVector_Copy(&tilePosOld, &_tilePos);
-    _tilePos = axialRound(pixelToHex_FlatTop(_screenCoord));
+    _tilePos = axialRound(pixelToHex_PointyTop(_screenCoord));
 
     // DEBUG_PRINT
     if ((tilePosOld.fX != _tilePos.fX) || (tilePosOld.fY != _tilePos.fY))
