@@ -1,25 +1,36 @@
 /**
  * @file tut_hex.cpp
- * @date 17-Jul-2019
+ * @date 2019/09/06
+ * @author LudiG
+ *
+ * Axial/Cubial coord-based hexagon shader and mouse tracker.
+ */
+
+/* Orx - Portable Game Engine
+ *
+ * Copyright (c) 2008-2010 Orx-Project
+ *
+ * This software is provided 'as-is', without any express or implied
+ * warranty. In no event will the authors be held liable for any damages
+ * arising from the use of this software.
+ *
+ * Permission is granted to anyone to use this software for any purpose,
+ * including commercial applications, and to alter it and redistribute it
+ * freely, subject to the following restrictions:
+ *
+ *    1. The origin of this software must not be misrepresented; you must not
+ *    claim that you wrote the original software. If you use this software
+ *    in a product, an acknowledgment in the product documentation would be
+ *    appreciated but is not required.
+ *
+ *    2. Altered source versions must be plainly marked as such, and must not be
+ *    misrepresented as being the original software.
+ *
+ *    3. This notice may not be removed or altered from any source
+ *    distribution.
  */
 
 #include "orx.h"
-
-
-/* This is a basic C tutorial creating a viewport and an object.
- *
- * As orx is data driven, here we just write 2 lines of code to create a viewport
- * and an object. All their properties are defined in the config file (01_Object.ini).
- * As a matter of fact, the viewport is associated with a camera implicitly created from the
- * info given in the config file. You can also set their sizes, positions, the object colors,
- * scales, rotations, animations, physical properties, and so on. You can even request
- * random values for these without having to add a single line of code.
- * In a later tutorial we'll see how to generate your whole scene (all background
- * and landscape objects for example) with a simple for loop written in 3 lines of code.
- *
- * For now, you can try to uncomment some of the lines of 01_Object.ini, play with them,
- * then relaunch this tutorial. For an exhaustive list of options, please look at CreationTemplate.ini.
- */
 
 orxFLOAT _screenHeight; // The screen height.
 orxFLOAT _screenWidth; // The screen width.
@@ -29,7 +40,9 @@ orxFLOAT _tileRadius; // The tile radius in screen coordinates (pixels).
 orxVECTOR _screenCoord; // The current screen coordinates of the mouse.
 orxVECTOR _tilePos; // The current tile position.
 
-#pragma mark - hexagon math
+// HEX
+
+// Function to convert cubial coords to axial coords.
 
 orxVECTOR cubeToAxial(const orxVECTOR& cube)
 {
@@ -38,6 +51,8 @@ orxVECTOR cubeToAxial(const orxVECTOR& cube)
 
     return result;
 }
+
+// Function to convert axial coords to cubial coords.
 
 orxVECTOR axialToCube(const orxVECTOR& axial)
 {
@@ -51,6 +66,8 @@ orxVECTOR axialToCube(const orxVECTOR& axial)
 
     return result;
 }
+
+// Function to round float cubial coords to int cubial coords.
 
 orxVECTOR cubeRound(const orxVECTOR& cube)
 {
@@ -77,10 +94,14 @@ orxVECTOR cubeRound(const orxVECTOR& cube)
     return result;
 }
 
+// Function to round float axial coords to int axial coords.
+
 orxVECTOR axialRound(const orxVECTOR& axial)
 {
     return cubeToAxial(cubeRound(axialToCube(axial)));
 }
+
+// Function to return axial hex-grid coords, given a screen position (horizontal, pointy-top hex layout).
 
 orxVECTOR pixelToHex_PointyTop(const orxVECTOR& point)
 {
@@ -92,6 +113,8 @@ orxVECTOR pixelToHex_PointyTop(const orxVECTOR& point)
     return result;
 }
 
+// Function to return axial hex-grid coords, given a screen position (vertical, flat-top hex layout).
+
 orxVECTOR pixelToHex_FlatTop(const orxVECTOR& point)
 {
     orxFLOAT size = _tileRadius;
@@ -101,6 +124,8 @@ orxVECTOR pixelToHex_FlatTop(const orxVECTOR& point)
 
     return result;
 }
+
+// Function to return a screen position, given axial hex-grid coords (horizontal, pointy-top hex layout).
 
 orxVECTOR hexToPixel_PointyTop(const orxVECTOR& hex)
 {
@@ -112,6 +137,8 @@ orxVECTOR hexToPixel_PointyTop(const orxVECTOR& hex)
     return result;
 }
 
+// Function to return a screen position, given axial hex-grid coords (vertical, flat-top hex layout).
+
 orxVECTOR hexToPixel_FlatTop(const orxVECTOR& hex)
 {
     orxFLOAT size = _tileRadius;
@@ -122,7 +149,7 @@ orxVECTOR hexToPixel_FlatTop(const orxVECTOR& hex)
     return result;
 }
 
-#pragma mark - orx
+// ORX
 
 static orxSTATUS orxFASTCALL handleShaderEvent(const orxEVENT* currentEvent)
 {
@@ -135,9 +162,7 @@ static orxSTATUS orxFASTCALL handleShaderEvent(const orxEVENT* currentEvent)
 
             // look for the parameter of interest.
             if (!orxString_Compare(pstPayload->zParamName, "highlight"))
-            {
                 orxVector_Copy(&pstPayload->vValue, &_tilePos);
-            }
         }
     }
 
@@ -166,9 +191,7 @@ orxSTATUS orxFASTCALL Run()
 
     // INPUT: Quit
     if(orxInput_IsActive("Quit"))
-    {
         result = orxSTATUS_FAILURE;
-    }
 
     // INPUT: Mouse
     orxVECTOR mouse;
@@ -183,21 +206,21 @@ orxSTATUS orxFASTCALL Run()
     orxVector_Copy(&tilePosOld, &_tilePos);
     _tilePos = axialRound(pixelToHex_PointyTop(_screenCoord));
 
-    // DEBUG_PRINT
+    // Print tile and screen position if mouse moves.
     if ((tilePosOld.fX != _tilePos.fX) || (tilePosOld.fY != _tilePos.fY))
-    {
         orxLOG("TILE: %f, %f FOR SHADER: %f, %f.", _tilePos.fX, _tilePos.fY, _screenCoord.fX, _screenCoord.fY);
-    }
 
     return result;
 }
 
 void orxFASTCALL Exit()
 {
+    // No specific garbage-collection requirements.
 }
 
 orxSTATUS orxFASTCALL Bootstrap()
 {
+    // Add the config directory as a resource path.
     orxResource_AddStorage(orxCONFIG_KZ_RESOURCE_GROUP, "../data/config", orxFALSE);
 
     return orxSTATUS_SUCCESS;
